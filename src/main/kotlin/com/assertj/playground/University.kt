@@ -18,4 +18,11 @@ class University {
                 .filter { it.name == name }
                 .flatMap { it.tutors }
     }
+
+    fun getActivities(students: List<Student>): List<String> {
+        return students
+                .flatMap { it.extraActivities }
+                .filterNotNull()
+                .distinct()
+    }
 }

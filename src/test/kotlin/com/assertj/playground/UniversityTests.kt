@@ -28,15 +28,15 @@ class UniversityTests {
     )
 
     private val dummyStudentsData = listOf(
-            Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors),
-            Student("ruvimbo", "muza", MATHEMATICS, mathematicsTutors),
-            Student("kobe", "bryant", LAW, lawTutors),
-            Student("ruvimbo", "muza", ENGLISH_STUDIES, computerScienceTutors)
+            Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors, listOf("basketball", "football")),
+            Student("ruvimbo", "muza", MATHEMATICS, mathematicsTutors, listOf(null)),
+            Student("kobe", "bryant", LAW, lawTutors, listOf(null)),
+            Student("ruvimbo", "muza", ENGLISH_STUDIES, englishTutors, listOf("football", "tennis"))
     )
 
     @Test
     fun `get all computer science students`() {
-        val student = Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors)
+        val student = Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors, listOf("basketball", "football"))
 
         val computerScienceStudents = university.getAllStudentsByDegree(dummyStudentsData, COMPUTER_SCIENCE)
 
@@ -49,7 +49,7 @@ class UniversityTests {
 
     @Test
     fun `get all tutors given a name`() {
-        val student = Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors)
+        val student = Student("james", "smith", COMPUTER_SCIENCE, computerScienceTutors, listOf("basketball", "football"))
         val expectedTutors = dummyStudentsData.find { it.name == student.name }?.tutors
 
         val tutors: List<Tutor> = university.getTutorsByStudentName(dummyStudentsData, student.name)
@@ -58,6 +58,16 @@ class UniversityTests {
                 .isNotEmpty
                 .hasSize(3)
                 .containsExactlyElementsOf(expectedTutors)
+    }
+
+    @Test
+    fun `get all extra activities uniquely excluding empty or null activities`() {
+        val activities: List<String> = university.getActivities(dummyStudentsData)
+
+        assertThat(activities)
+                .isNotEmpty
+                .hasSize(3)
+                .containsExactlyElementsOf(listOf("basketball", "football", "tennis"))
     }
 
 }
